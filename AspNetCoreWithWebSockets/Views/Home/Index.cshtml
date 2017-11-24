@@ -9,9 +9,9 @@
             <textarea id="message" class="form-control" placeholder="Enter message"></textarea>
         </div>
         <button id="sendMessage" class="btn btn-default">Send</button>
-        
+
         Connection status: <span id="status"></span>
-        <hr/>
+        <hr />
         <div class="form-group">
             Messages:
             <div id="data"></div>
@@ -21,31 +21,37 @@
 
 @section scripts{
     <script>
+        var data = document.getElementById("data");
+        var message = document.getElementById("message");
+        var sendMessage = document.getElementById("sendMessage");
+
         var webSocket;
-        $().ready(function () {
-            webSocket = new WebSocket("ws://" + window.location.host);
-            webSocket.onopen = function () {
-                $("#status").text("connected");
-            };
-            webSocket.onmessage = function (evt) {
-                $("#data").append("<p>" + evt.data + "</p>");
-            };
-            webSocket.onerror = function (evt) {
-                alert(evt.message);
-            };
-            webSocket.onclose = function () {
-                $("#status").text("disconnected");
-            };
-            $("#sendMessage").click(function () {
+        webSocket = new WebSocket("ws://" + window.location.host);
+        webSocket.onopen = function() {
+            document.getElementById("status").innerHTML = "Connected :)";
+        }
+
+        webSocket.onmessage = function (evt) {
+            data.innerHTML += "<p>"+evt.data+"</p>";
+        };
+
+        webSocket.onerror = function (evt) {
+            alert(evt.message);
+        };
+        webSocket.onclose = function () {
+            document.getElementById("status").innerHTML = "Disconnected :(";
+        };
+
+        sendMessage.addEventListener("click",
+            function() {
                 if (webSocket.readyState === WebSocket.OPEN) {
-                    webSocket.send($("#message").val());
-                    $("#message").val("");
-                    $("#message").focus();
+                    webSocket.send(message.value);
+                    message.value = "";
+                    message.focus();
                 }
                 else {
-                    $("status").text("Connection is closed");
+                    document.getElementById("status").innerHTML = "Connection is closed :/";
                 }
             });
-        });
     </script>
 }
