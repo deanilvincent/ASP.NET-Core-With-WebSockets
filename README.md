@@ -4,5 +4,5 @@ This repository is a simple demostration how websockets work in ASP.NET Core. On
 
 Clone this project:
 `
-https://github.com/deanilvincent/AspNetCoreWithWebSockets.git
+git clone https://github.com/deanilvincent/AspNetCoreWithWebSockets.git
 `
